@@ -9,9 +9,18 @@ app.use(express.json());
 
 app.use(cors());
 
+const allowedOrigins = ['http://localhost:3000'];
+
 app.use(cors({
-    origin: 'http://localhost:3000'  // Replace with your allowed domain
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    }
 }));
+
 app.get("/", (req, res) => {
     res.json({ message: "alive here!" });
 });
