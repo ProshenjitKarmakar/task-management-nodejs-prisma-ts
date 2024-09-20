@@ -6,7 +6,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 app.get("/", (req, res) => {
-    res.json({ message: "alive" });
+    res.json({ message: "alive here!" });
 });
 
 app.use('/api/v1', router)
