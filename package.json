@@ -6,6 +6,7 @@
     "type": "module",
     "scripts": {
         "table:update": "prisma db push",
+        "build": "tsc",
         "table:migrate": "npx prisma migrate dev",
         "start": "node --loader ./loader.mjs src/index.ts",
         "nodemon": "nodemon --watch 'src/**/*.ts' --exec node --loader ts-node/esm src/index.ts"
