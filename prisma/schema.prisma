@@ -22,10 +22,34 @@ model User {
   Post      Post[]
 }
 
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum Status {
+  PENDING
+  PROGRESS
+  COMPLETED
+}
+
+model Task {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(255)
+  description String   @db.VarChar(255)
+  dueDate     DateTime
+  priority    Priority @default(MEDIUM)
+  status      Status   @default(PENDING)
+  Post        Post[]
+}
+
 model Post {
   id      Int    @id @default(autoincrement())
   title   String
   content String
   userId  Int
   user    User   @relation(fields: [userId], references: [id])
+  Task    Task?  @relation(fields: [taskId], references: [id])
+  taskId  Int?
 }
