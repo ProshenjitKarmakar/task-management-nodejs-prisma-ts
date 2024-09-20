@@ -1,6 +1,6 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import ISuperDao from "../contracts/ISuperDao";
-import { PrismaModels } from "./../../@types/prismaModels.ts";
+import { PrismaModels } from "../../@types/prismaModels.ts";
 
 export class SuperDao<T extends keyof PrismaModels> implements ISuperDao {
     private prisma: PrismaClient;
@@ -11,57 +11,50 @@ export class SuperDao<T extends keyof PrismaModels> implements ISuperDao {
         this.model = this.prisma[modelName];
     }
 
+
+    // Method to find all records
     findAll = async () => {
         try {
-            const user = await this.model.findMany();
-            return user;
+            // Type casting to resolve union type issue
+            const data = await (this.model as any).findMany();
+            return data;
         } catch (error) {
-            console.error('Error creating user:', error);
+            console.error('Error fetching data:', error);
             throw error;
         }
     }
 
+    // Method to create a new record
     create = async (data: any) => {
         try {
-            const user = await this.model.create({
+            const result = await (this.model as any).create({
                 data: { ...data }
             });
-            return user;
+            return result;
         } catch (error) {
-            console.error('Error creating user:', error);
+            console.error('Error creating record:', error);
             throw error;
         }
     }
 
+    // Method to find records based on conditions
     findAllByWhere = async (
         where: Prisma.UserWhereInput, // Adjust this type based on your model
         attributes: Prisma.UserSelect | null = null, // Adjust this type based on your model
         order: Prisma.UserOrderByWithRelationInput[] = [{ id: 'desc' }] // Adjust this type based on your model
     ) => {
         try {
-            const data = await this.model.findMany({
+            const data = await (this.model as any).findMany({
                 where: where,
                 select: attributes || undefined,
                 orderBy: order
             });
             return data;
         } catch (error) {
-            console.error('Error creating user:', error);
+            console.error('Error fetching data by where:', error);
             throw error;
         }
     };
-
-    findById = async (id: number) => {
-        try {
-            const data = await this.model.findUnique({
-                where: { id }
-            });
-            return data;
-        } catch (error) {
-            console.error('Error creating user:', error);
-            throw error;
-        }
-    }
 
     findOneByWhere = async (
         where: Prisma.UserWhereInput,
@@ -69,7 +62,7 @@ export class SuperDao<T extends keyof PrismaModels> implements ISuperDao {
         order: Prisma.UserOrderByWithRelationInput[] = [{ id: 'desc' }]
     ) => {
         try {
-            const data = await this.model.findFirst({
+            const data = await await (this.model as any).findFirst({
                 where: { ...where },
                 include: { ...attributes },
                 orderBy: order
@@ -81,48 +74,58 @@ export class SuperDao<T extends keyof PrismaModels> implements ISuperDao {
         }
     }
 
+
+    // Other methods remain the same with (this.model as any) casting
+    findById = async (id: number) => {
+        try {
+            const data = await (this.model as any).findUnique({
+                where: { id }
+            });
+            return data;
+        } catch (error) {
+            console.error('Error fetching data by ID:', error);
+            throw error;
+        }
+    }
+
+    // Method to update records based on 'where' conditions
     updateWhere = async (
         data: Prisma.UserUpdateInput,
         where: Prisma.UserWhereUniqueInput
     ) => {
         try {
-            const user = await this.model.update({
+            const updatedRecord = await (this.model as any).update({
                 where: where,
                 data: data
             });
-            return user;
+            return updatedRecord;
         } catch (error) {
-            console.error('Error creating user:', error);
+            console.error('Error updating record:', error);
             throw error;
         }
     };
 
-    updateById = async (
-        data: Prisma.UserUpdateInput,
-        id: number
-    ) => {
+    updateById = async (data: Prisma.UserUpdateInput, id: number) => {
         try {
-            const user = await this.model.update({
+            const updatedRecord = await (this.model as any).update({
                 where: { id },
                 data: data
             });
-            return user;
+            return updatedRecord;
         } catch (error) {
-            console.error('Error creating user:', error);
+            console.error('Error updating record by ID:', error);
             throw error;
         }
     }
 
-    deleteByWhere = async (
-        where: Prisma.UserWhereUniqueInput
-    ) => {
+    deleteByWhere = async (where: Prisma.UserWhereUniqueInput) => {
         try {
-            const user = await this.model.delete({
+            const deletedRecord = await (this.model as any).delete({
                 where: where
             });
-            return user;
+            return deletedRecord;
         } catch (error) {
-            console.error('Error creating user:', error);
+            console.error('Error deleting record:', error);
             throw error;
         }
     }

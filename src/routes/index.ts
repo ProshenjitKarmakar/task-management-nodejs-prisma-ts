@@ -3,6 +3,8 @@ import testRoutes from './testRoutes.ts';
 import quoteRoutes from './quoteRoutes.ts';
 import userRouter from './users.routes.ts';
 import authRoutes from './auth.routes.ts';
+import taskRoutes from './taskRoutes.ts';
+
 
 
 const router = Router();
@@ -11,6 +13,10 @@ const defaultRoutes = [
     {
         path: '/auth',
         route: authRoutes
+    },
+    {
+        path: '/task',
+        route: taskRoutes
     },
     {
         path: '/test',
