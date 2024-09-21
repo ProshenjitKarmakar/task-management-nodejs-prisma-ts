@@ -2,7 +2,7 @@ import { Prisma } from "@prisma/client";
 
 export default interface ISuperDao {
     findAll: () => Promise<any>;
-    count: () => Promise<any>;
+    count: (where: any) => Promise<any>;
     findAllWithPaginationAndDates: (skip: number, take: number, fromDate: string, toDate: string) => Promise<any>;
     findAllByWhere: (
         where: Prisma.UserWhereInput,

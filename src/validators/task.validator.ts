@@ -13,11 +13,19 @@ export class TeskValidator {
             perPage: zod.string({
                 required_error: 'Perpage is required',
             }),
-            fromDate: zod.string({
-                required_error: 'From Date is required',
+            startDate: zod.string({
+                required_error: 'Start Date is required',
             }),
-            toDate: zod.string({
-                required_error: 'To Date is required',
+            endDate: zod.string({
+                required_error: 'End Date is required',
+            }),
+            priority: zod.enum(['LOW', 'MEDIUM', 'HIGH', 'ALL'], {
+                required_error: 'Priority is required',
+                invalid_type_error: 'Invalid priority value',
+            }),
+            status: zod.enum(['PENDING', 'PROGRESS', 'COMPLETED', 'ALL'], {
+                required_error: 'Status is required',
+                invalid_type_error: 'Invalid status value',
             }),
         });
 

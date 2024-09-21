@@ -24,21 +24,14 @@ export class SuperDao<T extends keyof PrismaModels> implements ISuperDao {
         }
     }
 
-    findAllWithPaginationAndDates = async (skip: number, take: number, fromDate: string, toDate: string) => {
+    findAllWithPaginationAndDates = async (skip: number, take: number, where: any) => {
         try {
-
-            const dateFilter = fromDate && toDate ? {
-                dueDate: {
-                    gte: new Date(fromDate), // Greater than or equal to fromDate
-                    lte: new Date(toDate),   // Less than or equal to toDate
-                }
-            } : {}
             // Use the skip and take for pagination
             const data = await (this.model as any).findMany({
                 skip,
                 take,
                 where: {
-                    ...dateFilter,
+                    ...where,
                 },
                 orderBy: {
                     dueDate: 'desc', // Assuming you're ordering by dueDate
@@ -83,9 +76,9 @@ export class SuperDao<T extends keyof PrismaModels> implements ISuperDao {
         }
     };
 
-    count = async () => {
+    count = async (where: any) => {
         try {
-            return await (this.model as any).count();
+            return await (this.model as any).count({ where });
         } catch (error) {
             console.error('Error counting data:', error);
             throw error;

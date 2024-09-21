@@ -2,6 +2,7 @@ import { Request } from 'express';
 import responseHandler from './../helpers/responseHandler.ts';
 import httpStatus from 'http-status';
 import { TaskDao } from './../dao/implementations/TaskDao.ts';
+import { TStatus } from '../interfaces/task.interface.ts';
 
 export class TaskService {
     private taskDao: TaskDao;
@@ -12,15 +13,36 @@ export class TaskService {
     getAllTask = async (req: Request) => {
         try {
             let message = 'Task data successfully fetched!';
-            const { page, perPage, fromDate, toDate } = req.query;
+            const { page, perPage, startDate, endDate, status, priority } = req.query;
 
             const take = Number(perPage);
             const pageNumber = Number(page);
             const skip = (pageNumber - 1) * take;
 
-            const totalCount = await this.taskDao.count();
+            let where: { dueDate: { gte: any, lte: any }, status?: any, priority?: any } = {
+                dueDate: {
+                    gte: new Date(startDate as string), // Greater than or equal to fromDate
+                    lte: new Date(endDate as string),   // Less than or equal to toDate
+                },
+            }
 
-            const response = await this.taskDao.findAllWithPaginationAndDates(skip, take, fromDate as string, toDate as string);
+            if (status === 'PENDING' || status === 'PROGRESS' || status === 'COMPLETED') {
+                where = {
+                    ...where,
+                    status: status as TStatus,
+                }
+            }
+
+            if (priority === 'LOW' || priority === 'MEDIUM' || priority === 'HIGH') {
+                where = {
+                    ...where,
+                    priority: priority,
+                }
+            }
+
+            const totalCount = await this.taskDao.count(where);
+
+            const response = await this.taskDao.findAllWithPaginationAndDates(skip, take, where);
             console.log("=====response====", response);
             const payload = {
                 data: response ?? [],
