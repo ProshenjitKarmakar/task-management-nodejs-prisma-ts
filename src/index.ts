@@ -3,12 +3,11 @@ import router from './routes/index.ts';
 import cors from 'cors';
 import { register } from "node:module";
 import { pathToFileURL } from "node:url";
+register('ts-node/esm', pathToFileURL('./'));
 
 const app = express();
-const port = process.env.PORT || 3000;
 
 app.use(express.json());
-register('ts-node/esm', pathToFileURL('./'));
 
 app.use(cors());
 
@@ -31,6 +30,7 @@ app.get("/", (req, res) => {
 
 app.use('/api/v1', router)
 
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 }).on('error', (err) => {
