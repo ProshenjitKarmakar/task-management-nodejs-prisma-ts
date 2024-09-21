@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express';
 import router from './routes/index.ts';
 import cors from 'cors';
+import { register } from "node:module";
+import { pathToFileURL } from "node:url";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -20,6 +22,8 @@ app.use(cors({
         }
     }
 }));
+
+register('ts-node/esm', pathToFileURL('./'));
 
 app.get("/", (req, res) => {
     res.json({ message: "alive here!" });
