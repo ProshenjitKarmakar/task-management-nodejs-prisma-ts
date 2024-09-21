@@ -24,6 +24,20 @@ export class SuperDao<T extends keyof PrismaModels> implements ISuperDao {
         }
     }
 
+    findAllWithPagination = async (skip: number, take: number) => {
+        try {
+            // Use the skip and take for pagination
+            const data = await (this.model as any).findMany({
+                skip,
+                take,
+            });
+            return data;
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            throw error;
+        }
+    }
+
     // Method to create a new record
     create = async (data: any) => {
         try {
@@ -55,6 +69,15 @@ export class SuperDao<T extends keyof PrismaModels> implements ISuperDao {
             throw error;
         }
     };
+
+    count = async () => {
+        try {
+            return await (this.model as any).count();
+        } catch (error) {
+            console.error('Error counting data:', error);
+            throw error;
+        }
+    }
 
     findOneByWhere = async (
         where: Prisma.UserWhereInput,

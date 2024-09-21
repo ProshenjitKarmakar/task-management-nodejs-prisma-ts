@@ -12,10 +12,29 @@ export class TaskService {
     getAllTask = async (req: Request) => {
         try {
             let message = 'Task data successfully fetched!';
-            const response = await this.taskDao.findAll();
+            const { page, perPage } = req.query;
+
+
+            const take = Number(perPage);
+            const pageNumber = Number(page);
+            const skip = (pageNumber - 1) * take;
+
+            const totalCount = await this.taskDao.count();
+
+            const response = await this.taskDao.findAllWithPagination(skip, take);
             console.log("=====response====", response);
+            console.log("=====totalCount====", totalCount);
+            const payload = {
+                data: response ?? [],
+                extraData: {
+                    page: pageNumber,
+                    perPage: take,
+                    total: totalCount
+                }
+            }
+
             if (response) {
-                return responseHandler.returnSuccess(httpStatus.OK, message, response)
+                return responseHandler.returnSuccess(httpStatus.OK, message, payload)
             }
             return responseHandler.returnError(httpStatus.BAD_REQUEST, 'Task list fetced failed!');
         } catch (e) {

@@ -7,16 +7,16 @@ import { errorMessageFormatter } from "./../helpers/zod.ts";
 export class TeskValidator {
     listTaskDataValidate = async (req: Request, res: Response, next: NextFunction) => {
         const dataSchema = zod.object({
-            page: zod.number({
+            page: zod.string({
                 required_error: 'Page is required',
             }),
-            perPage: zod.number({
+            perPage: zod.string({
                 required_error: 'Perpage is required',
             }),
         });
 
         try {
-            req.body = dataSchema.parse(req.body);
+            req.query = dataSchema.parse(req.query);
             next();
         } catch (err) {
             if (err instanceof ZodError) {
