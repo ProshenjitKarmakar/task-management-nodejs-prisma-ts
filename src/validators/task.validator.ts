@@ -13,6 +13,12 @@ export class TeskValidator {
             perPage: zod.string({
                 required_error: 'Perpage is required',
             }),
+            fromDate: zod.string({
+                required_error: 'From Date is required',
+            }),
+            toDate: zod.string({
+                required_error: 'To Date is required',
+            }),
         });
 
         try {
