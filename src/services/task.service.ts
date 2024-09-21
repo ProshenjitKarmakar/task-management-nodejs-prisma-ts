@@ -80,8 +80,8 @@ export class TaskService {
     deleteTask = async (req: Request) => {
         try {
             let message = 'Task deleted successfully!';
-            const data = { ...req.body };
-            const where = { id: data?.id }
+            const data = { ...req.query };
+            const where = { id: Number(data?.id) }
             const response = await this.taskDao.deleteByWhere(where);
             console.log("=====response====", response);
             if (response) {

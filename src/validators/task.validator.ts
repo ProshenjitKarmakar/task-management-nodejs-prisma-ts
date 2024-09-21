@@ -104,13 +104,13 @@ export class TeskValidator {
     }
     deleteTaskDataValidate = async (req: Request, res: Response, next: NextFunction) => {
         const dataSchema = zod.object({
-            id: zod.number({
+            id: zod.string({
                 required_error: 'Id is required',
             }),
         });
 
         try {
-            req.body = dataSchema.parse(req.body);
+            req.query = dataSchema.parse(req.query);
             next();
         } catch (err) {
             if (err instanceof ZodError) {
