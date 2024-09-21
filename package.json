@@ -8,7 +8,7 @@
         "table:update": "prisma db push",
         "build": "tsc",
         "table:migrate": "npx prisma migrate dev",
-        "start": "node --loader ts-node/esm src/index.ts",
+        "start": "node --loader ts-node/esm --trace-warnings src/index.ts",
         "nodemon": "nodemon --watch 'src/**/*.ts' --exec node --loader ts-node/esm src/index.ts"
     },
     "devDependencies": {
@@ -32,5 +32,8 @@
         "stripe": "^16.7.0",
         "ts-node-dev": "^2.0.0",
         "zod": "^3.23.8"
+    },
+    "engines": {
+        "node": ">=20.15.1"
     }
 }

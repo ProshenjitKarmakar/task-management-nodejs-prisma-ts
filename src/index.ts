@@ -8,6 +8,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
+register('ts-node/esm', pathToFileURL('./'));
 
 app.use(cors());
 
@@ -23,7 +24,6 @@ app.use(cors({
     }
 }));
 
-register('ts-node/esm', pathToFileURL('./'));
 
 app.get("/", (req, res) => {
     res.json({ message: "alive here!" });
@@ -35,4 +35,12 @@ app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 }).on('error', (err) => {
     console.error('Error starting server:', err);
+});
+
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
