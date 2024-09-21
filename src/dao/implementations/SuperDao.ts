@@ -76,6 +76,34 @@ export class SuperDao<T extends keyof PrismaModels> implements ISuperDao {
         }
     };
 
+    countTasksByStatus = async () => {
+        try {
+            // Querying count for each status individually
+            const pendingCount = await (this.model as any).count({
+                where: { status: 'PENDING' },
+            });
+
+            const progressCount = await (this.model as any).count({
+                where: { status: 'PROGRESS' },
+            });
+
+            const completedCount = await (this.model as any).count({
+                where: { status: 'COMPLETED' },
+            });
+
+            // Return the individual counts in an object
+            return {
+                all: pendingCount + progressCount + completedCount,
+                pending: pendingCount,
+                progress: progressCount,
+                completed: completedCount,
+            };
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            throw error;
+        }
+    };
+
     count = async (where: any) => {
         try {
             return await (this.model as any).count({ where });

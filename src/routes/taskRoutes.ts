@@ -8,6 +8,8 @@ const router = Router();
 const taskValidator = new TeskValidator();
 const testController = new TaskController();
 
+router.get('/dashboard/count', varifyToken, testController.dashboardCount);
+
 router.get('/list', varifyToken, taskValidator.listTaskDataValidate, testController.listTask);
 router.post('/add', varifyToken, taskValidator.addTaskDataValidate, testController.addTask);
 router.put('/update', varifyToken, taskValidator.updateTaskDataValidate, testController.updateTask);

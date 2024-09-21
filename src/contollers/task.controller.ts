@@ -9,6 +9,16 @@ export class TaskController {
         this.taskService = new TaskService();
     }
 
+    dashboardCount = async (req: Request, res: Response) => {
+        try {
+            const data = await this.taskService.countTasksByStatus(req);
+            res.status(data.statusCode).send(data.response);
+        } catch (e) {
+            console.log("===e===", e)
+            res.status(httpStatus.BAD_GATEWAY).send(e);
+        }
+    };
+
     listTask = async (req: Request, res: Response) => {
         try {
             const data = await this.taskService.getAllTask(req);

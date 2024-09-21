@@ -10,6 +10,23 @@ export class TaskService {
         this.taskDao = new TaskDao();
     }
 
+    countTasksByStatus = async (req: Request) => {
+        try {
+            let message = 'Count found successfully!';
+            const response = await this.taskDao.countTasksByStatus();
+            console.log("=====response====", response);
+            if (response) {
+                const payload = {
+                    ...response
+                }
+                return responseHandler.returnSuccess(httpStatus.OK, message, payload)
+            }
+            return responseHandler.returnError(httpStatus.BAD_REQUEST, 'Task created failed!');
+        } catch (e) {
+            return responseHandler.returnError(httpStatus.BAD_REQUEST, `Something went wrong! ${e}`);
+        }
+    }
+
     getAllTask = async (req: Request) => {
         try {
             let message = 'Task data successfully fetched!';
@@ -39,6 +56,9 @@ export class TaskService {
                     priority: priority,
                 }
             }
+
+            console.log("==where====", where);
+
 
             const totalCount = await this.taskDao.count(where);
 
